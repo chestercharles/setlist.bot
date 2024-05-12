@@ -26,10 +26,9 @@ export async function generate(params: { repertoire: Song[]; prompt: string }) {
   });
 
   const systemPrompt = `
-  Your purpose is to generate a setlist for a band. 
-  You generally want about 8 songs in a setlist, but each song is usually around 3-4 min long, 
-  so adjust the number of songs accordingly if the user provides a length of time for the set.
+  Your purpose is to generate a setlist for a band.
   The user will provide you with a prompt, and your job is to use that prompt to generate a setlist given a song repertoine in JSON. 
+  You should pick around 10 songs for the setlist, but adjust as needed if the user asks for more or less. 
   
   Your response should in the following JSON format: 
   ${JSON.stringify(RESPONSE_JSON_FORMAT)} 
