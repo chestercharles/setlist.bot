@@ -12,6 +12,10 @@ const columns: ColumnDef<Song>[] = [
     accessorKey: "title",
     header: "Title",
   },
+  {
+    accessorKey: "key",
+    header: "Key",
+  },
 ];
 
 export function SongList({ bandId }: { bandId: string }) {
