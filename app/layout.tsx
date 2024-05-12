@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { LoginGUI } from "./login";
+import { AuthGuard } from "./AuthGuard";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,8 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <LoginGUI />
-        {children}
+        <AuthGuard>{children}</AuthGuard>
       </body>
     </html>
   );

@@ -22,23 +22,27 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon, RocketIcon } from "@radix-ui/react-icons";
-import { useRouter, usePathname } from "next/navigation";
 
-export function LoginGUI() {
+export function AuthGuard({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    db.open();
+  });
+
   const ui = useObservable(db.cloud.userInteraction);
   const user = useObservable(db.cloud.currentUser);
-  const router = useRouter();
-  const pathname = usePathname();
-  useEffect(() => {
-    if (user?.isLoggedIn && pathname === "/") {
-      router.replace("/bands");
-    }
-  }, [user, router, pathname]);
-  if (!ui) return null; // No user interaction is requested.
-  return <LoginDialog ui={ui} />;
+
+  if (user?.isLoggedIn) {
+    return <>{children}</>;
+  }
+
+  if (!ui) {
+    return null;
+  }
+
+  return <LoginForm ui={ui} />;
 }
 
-function LoginDialog({ ui }: { ui: DXCUserInteraction }) {
+function LoginForm({ ui }: { ui: DXCUserInteraction }) {
   const [params, setParams] = useState<{ [param: string]: string }>({});
   return (
     <Dialog open={true}>

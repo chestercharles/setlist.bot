@@ -58,7 +58,7 @@ export function InviteMemberButton({ bandId }: { bandId: string }) {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="email">Key</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   id="key"
                   type="email"

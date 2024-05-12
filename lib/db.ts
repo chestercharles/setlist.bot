@@ -36,7 +36,7 @@ class SetlistsDexieDB extends Dexie {
 
       // dexie-cloud access control tables
       realms: "@realmId",
-      members: "@id,[realmId+email],bandId",
+      members: "@id,[realmId+email]",
       roles: "[realmId+name]",
     });
   }
@@ -58,11 +58,23 @@ const slugify = (str: string) =>
     .replace(/-+$/, "");
 
 export async function createBand(params: { name: string }) {
-  const id = await db.bands.add({
+  const bandId = await db.bands.add({
     id: slugify(params.name),
     name: params.name,
   });
-  return id;
+
+  const realmId = getTiedRealmId(bandId);
+
+  await db.realms.put({
+    realmId,
+    name: params.name,
+    represents: "a band",
+  });
+
+  // Move band into the realm
+  await db.bands.update(bandId, { realmId });
+
+  return bandId;
 }
 
 export function deleteBand(band: Band) {
@@ -102,10 +114,15 @@ export async function addSong(params: {
 export async function editSong(
   params: Pick<Song, "id" | "title" | "key" | "description">
 ) {
+  const song = await db.songs.get(params.id);
+  if (!song) throw new Error("Song not found");
+  const band = await db.bands.get(song.bandId);
+  if (!band) throw new Error("Band not found");
   await db.songs.update(params.id, {
     title: params.title,
     key: params.key,
     description: params.description,
+    realmId: band.realmId,
   });
 }
 
@@ -113,19 +130,19 @@ export function inviteBandMember(
   band: Band,
   newMember: { email: string; name: string }
 ) {
-  return db.transaction("rw", [db.bands, db.realms, db.members], () => {
+  return db.transaction("rw", [db.bands, db.realms, db.members], async () => {
     // Add or update a realm, tied to the todo-list using getTiedRealmId():
     const realmId = getTiedRealmId(band.id);
-    db.realms.put({
+    await db.realms.put({
       realmId,
       name: band.name,
       represents: "a band",
     });
 
-    // Move todo-list into the realm (if not already there):
-    db.bands.update(band.id, { realmId });
+    // Move band into the realm (if not already there):
+    await db.bands.update(band.id, { realmId });
 
-    db.members.add({
+    await db.members.add({
       realmId,
       email: newMember.email,
       name: newMember.name,

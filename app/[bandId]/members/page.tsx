@@ -15,7 +15,7 @@ export default function MembersPage({
           <InviteMemberButton bandId={params.bandId} />
         </div>
       </div>
-      <MembersList bandId={params.bandId} />
+      <MembersList />
     </main>
   );
 }
