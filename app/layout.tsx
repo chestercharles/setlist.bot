@@ -6,7 +6,7 @@ import { AuthGuard } from "./AuthGuard";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Setlists",
+  title: "Setlist Bot",
 };
 
 export default function RootLayout({
