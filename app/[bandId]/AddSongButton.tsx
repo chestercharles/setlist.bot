@@ -70,6 +70,7 @@ export function AddSongButton({ bandId }: { bandId: string }) {
                 <Textarea
                   id="key"
                   required
+                  className="h-[250px]"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
