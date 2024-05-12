@@ -35,7 +35,6 @@ export async function generate(params: { repertoire: Song[]; prompt: string }) {
   ${JSON.stringify(RESPONSE_JSON_FORMAT)} 
 
   Here is the song repertoire in JSON format:
-  
   ${JSON.stringify(repertoire)}
   `;
 
