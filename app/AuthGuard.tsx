@@ -10,13 +10,6 @@ import {
   DXCAlert,
 } from "dexie-cloud-addon";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -37,12 +30,14 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <main className={cn("p-8")}>
-      <div className={cn("flex", "justify-center")}>
-        <h1 className={cn("font-extrabold")}>Setlists</h1>
-      </div>
-      <div className={cn("py-8")}>
-        {ui ? <LoginForm ui={ui} /> : <LoginSkeleton />}
+    <main className={cn("p-8", "flex", "justify-center")}>
+      <div className={cn("w-80")}>
+        <div className={cn("flex", "justify-center")}>
+          <h1 className={cn("font-extrabold")}>Setlist Bot</h1>
+        </div>
+        <div className={cn("py-8")}>
+          {ui ? <LoginForm ui={ui} /> : <LoginSkeleton />}
+        </div>
       </div>
     </main>
   );
@@ -52,16 +47,16 @@ function LoginSkeleton() {
   return (
     <div>
       <div>
-        <Skeleton className="h-6 w-[200px]" />
+        <Skeleton className="h-6 w-80" />
       </div>
       <form>
         <div className="grid gap-4 py-4">
-          <Skeleton className="h-6 w-[200px]" />
-          <Skeleton className="h-6 w-[200px]" />
+          <Skeleton className="h-6 w-80" />
+          <Skeleton className="h-6 w-80" />
         </div>
       </form>
       <div>
-        <Skeleton className="h-6 w-[200px]" />
+        <Skeleton className="h-6 w-80" />
       </div>
     </div>
   );
