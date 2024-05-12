@@ -1,5 +1,5 @@
 import Dexie, { EntityTable, InsertType } from "dexie";
-import dexieCloud, { getTiedRealmId } from "dexie-cloud-addon";
+import dexieCloud, { DBRealmMember, getTiedRealmId } from "dexie-cloud-addon";
 
 export interface Band {
   id: string;
@@ -18,6 +18,10 @@ export interface Song {
   description?: string;
 }
 
+export interface Member extends DBRealmMember {
+  bandId?: string;
+}
+
 class SetlistsDexieDB extends Dexie {
   // 'friends' is added by dexie when declaring the stores()
   // We just tell the typing system this is the case
@@ -32,7 +36,7 @@ class SetlistsDexieDB extends Dexie {
 
       // dexie-cloud access control tables
       realms: "@realmId",
-      members: "@id,[realmId+email]",
+      members: "@id,[realmId+email],bandId",
       roles: "[realmId+name]",
     });
   }

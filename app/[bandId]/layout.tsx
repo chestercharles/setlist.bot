@@ -34,8 +34,8 @@ export default function BandLayout({
       href: `/bands`,
     },
     {
-      name: "Invite",
-      href: `/${band.id}/invite`,
+      name: "Members",
+      href: `/${band.id}/members`,
     },
     {
       name: "Generate",
