@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+dexie-cloud.key
+dexie-cloud.json
+
+.env
