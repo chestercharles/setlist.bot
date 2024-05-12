@@ -55,7 +55,7 @@ export function EditSongSheet({
         }
       }}
     >
-      <SheetContent>
+      <SheetContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <SheetHeader>
           <SheetTitle>Edit Song</SheetTitle>
         </SheetHeader>
@@ -98,6 +98,7 @@ export function EditSongSheet({
                 <Textarea
                   id="key"
                   required
+                  className="h-[250px]"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />

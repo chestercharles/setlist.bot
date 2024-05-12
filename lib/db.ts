@@ -69,10 +69,10 @@ export function deleteBand(band: Band) {
   return db.transaction(
     "rw",
     [db.bands, db.songs, db.realms, db.members],
-    () => {
-      db.songs.where({ bandId: band.id }).delete();
-      db.bands.delete(band.id);
-      db.realms.delete(getTiedRealmId(band.id)); // members are auto-deleted with realm
+    async () => {
+      await db.songs.where({ bandId: band.id }).delete();
+      await db.bands.delete(band.id);
+      await db.realms.delete(getTiedRealmId(band.id)); // members are auto-deleted with realm
     }
   );
 }
