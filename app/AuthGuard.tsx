@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon, RocketIcon } from "@radix-ui/react-icons";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -35,70 +36,97 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  if (!ui) {
-    return null;
-  }
+  return (
+    <main className={cn("p-8")}>
+      <div className={cn("flex", "justify-center")}>
+        <h1 className={cn("font-extrabold")}>Setlists</h1>
+      </div>
+      <div className={cn("py-8")}>
+        {ui ? <LoginForm ui={ui} /> : <LoginSkeleton />}
+      </div>
+    </main>
+  );
+}
 
-  return <LoginForm ui={ui} />;
+function LoginSkeleton() {
+  return (
+    <div>
+      <div>
+        <Skeleton className="h-6 w-[200px]" />
+      </div>
+      <form>
+        <div className="grid gap-4 py-4">
+          <Skeleton className="h-6 w-[200px]" />
+          <Skeleton className="h-6 w-[200px]" />
+        </div>
+      </form>
+      <div>
+        <Skeleton className="h-6 w-[200px]" />
+      </div>
+    </div>
+  );
 }
 
 function LoginForm({ ui }: { ui: DXCUserInteraction }) {
   const [params, setParams] = useState<{ [param: string]: string }>({});
   return (
-    <Dialog open={true}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{ui.title}</DialogTitle>
-        </DialogHeader>
-        <DXCAlerts alerts={ui.alerts} />
-        <form
-          onSubmit={(ev) => {
-            ev.preventDefault();
-            ui.onSubmit(params);
-          }}
-        >
-          <div className="grid gap-4 py-4">
-            {(Object.entries(ui.fields) as [string, DXCInputField][]).map(
-              ([fieldName, { type, label, placeholder }], idx) => (
-                <div key={idx} className="grid grid-cols-4 items-center gap-4">
-                  {label && (
-                    <Label htmlFor={fieldName} className="text-right">
-                      {label}
-                    </Label>
-                  )}
-                  <Input
-                    id={fieldName}
-                    type={type}
-                    name={fieldName}
-                    placeholder={placeholder}
-                    value={params[fieldName] || ""}
-                    className={cn(label ? "col-span-3" : "col-span-4")}
-                    onChange={(ev) => {
-                      const value = ev.target.value;
-                      let updatedParams = {
-                        ...params,
-                        [fieldName]: value,
-                      };
-                      setParams(updatedParams);
-                    }}
-                  />
-                </div>
-              )
-            )}
-          </div>
-        </form>
-        <DialogFooter>
-          <Button type="submit" onClick={() => ui.onSubmit(params)}>
-            Submit
-          </Button>
-          {ui.cancelLabel && (
-            <Button variant="secondary" onClick={ui.onCancel}>
-              {ui.cancelLabel}
-            </Button>
+    <div>
+      <div>
+        <h1>{ui.title}</h1>
+      </div>
+      <DXCAlerts alerts={ui.alerts} />
+      <form
+        onSubmit={(ev) => {
+          ev.preventDefault();
+          ui.onSubmit(params);
+        }}
+      >
+        <div className="grid gap-4 py-4">
+          {(Object.entries(ui.fields) as [string, DXCInputField][]).map(
+            ([fieldName, { type, label, placeholder }], idx) => (
+              <div key={idx} className="grid grid-cols-4 items-center gap-4">
+                {label && (
+                  <Label htmlFor={fieldName} className="text-right">
+                    {label}
+                  </Label>
+                )}
+                <Input
+                  id={fieldName}
+                  type={type}
+                  name={fieldName}
+                  placeholder={placeholder}
+                  value={params[fieldName] || ""}
+                  className={cn(label ? "col-span-3" : "col-span-4")}
+                  onChange={(ev) => {
+                    const value = ev.target.value;
+                    let updatedParams = {
+                      ...params,
+                      [fieldName]: value,
+                    };
+                    setParams(updatedParams);
+                  }}
+                />
+              </div>
+            )
           )}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </form>
+      <div>
+        <Button type="submit" onClick={() => ui.onSubmit(params)}>
+          Submit
+        </Button>
+        {ui.cancelLabel && (
+          <Button
+            variant="secondary"
+            onClick={() => {
+              window.location.href = "/";
+            }}
+          >
+            {ui.cancelLabel}
+          </Button>
+        )}
+      </div>
+    </div>
   );
 }
 
