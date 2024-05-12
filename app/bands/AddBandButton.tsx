@@ -27,7 +27,7 @@ export function AddBandButton() {
       <Button type="button" onClick={() => setOpen(true)}>
         New
       </Button>
-      <SheetContent>
+      <SheetContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <SheetHeader>
           <SheetTitle>Create Band</SheetTitle>
         </SheetHeader>

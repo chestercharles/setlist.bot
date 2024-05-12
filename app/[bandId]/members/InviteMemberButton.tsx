@@ -29,7 +29,7 @@ export function InviteMemberButton({ bandId }: { bandId: string }) {
       <Button type="button" onClick={() => setOpen(true)}>
         Invite
       </Button>
-      <SheetContent>
+      <SheetContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <SheetHeader>
           <SheetTitle>Invite Member to {band?.name}</SheetTitle>
         </SheetHeader>

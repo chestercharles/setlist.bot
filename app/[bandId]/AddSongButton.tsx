@@ -24,7 +24,7 @@ export function AddSongButton({ bandId }: { bandId: string }) {
       <Button type="button" onClick={() => setOpen(true)}>
         New
       </Button>
-      <SheetContent>
+      <SheetContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <SheetHeader>
           <SheetTitle>Add Song</SheetTitle>
         </SheetHeader>
