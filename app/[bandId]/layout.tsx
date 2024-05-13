@@ -30,20 +30,16 @@ export default function BandLayout({
 
   const options: MenuOption[] = [
     {
-      name: "Bands",
-      href: `/bands`,
-    },
-    {
-      name: "Members",
-      href: `/${band.id}/members`,
-    },
-    {
       name: "Generate",
       href: `/${band.id}/generate`,
     },
     {
       name: "Repertoire",
       href: `/${band.id}`,
+    },
+    {
+      name: "Settings",
+      href: `/${band.id}/settings`,
     },
   ];
 
