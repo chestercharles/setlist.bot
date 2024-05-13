@@ -23,8 +23,6 @@ export interface Member extends DBRealmMember {
 }
 
 class SetlistsDexieDB extends Dexie {
-  // 'friends' is added by dexie when declaring the stores()
-  // We just tell the typing system this is the case
   bands!: EntityTable<Band, "id", InsertType<Band, "realmId" | "id" | "owner">>;
   songs!: EntityTable<Song, "id", InsertType<Song, "realmId" | "id" | "owner">>;
 
@@ -34,7 +32,7 @@ class SetlistsDexieDB extends Dexie {
       bands: "id, name",
       songs: "id, title, bandId, key, description",
 
-      // dexie-cloud access control tables
+      // These dexie-cloud access control tables should not be changed
       realms: "@realmId",
       members: "@id,[realmId+email]",
       roles: "[realmId+name]",
@@ -58,23 +56,26 @@ const slugify = (str: string) =>
     .replace(/-+$/, "");
 
 export async function createBand(params: { name: string }) {
-  const bandId = await db.bands.add({
-    id: slugify(params.name),
-    name: params.name,
+  return db.transaction("rw", [db.bands, db.realms], async () => {
+    const bandId = await db.bands.add({
+      id: slugify(params.name),
+      name: params.name,
+    });
+
+    // Creates a new realm for the band
+    const realmId = getTiedRealmId(bandId);
+
+    await db.realms.put({
+      realmId,
+      name: params.name,
+      represents: "a band",
+    });
+
+    // Put the band into that realm
+    await db.bands.update(bandId, { realmId });
+
+    return bandId;
   });
-
-  const realmId = getTiedRealmId(bandId);
-
-  await db.realms.put({
-    realmId,
-    name: params.name,
-    represents: "a band",
-  });
-
-  // Move band into the realm
-  await db.bands.update(bandId, { realmId });
-
-  return bandId;
 }
 
 export function deleteBand(band: Band) {
