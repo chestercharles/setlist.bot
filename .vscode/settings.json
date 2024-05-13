@@ -4,5 +4,8 @@
     "javascript": "javascript",
     "css": "css",
     "typescript": "typescript"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
   }
 }
