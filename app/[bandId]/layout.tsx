@@ -31,11 +31,11 @@ export default function BandLayout({
   const options: MenuOption[] = [
     {
       name: "Generate",
-      href: `/${band.id}/generate`,
+      href: `/${band.id}`,
     },
     {
       name: "Repertoire",
-      href: `/${band.id}`,
+      href: `/${band.id}/repertoire`,
     },
     {
       name: "Settings",
