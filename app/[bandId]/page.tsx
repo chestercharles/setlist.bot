@@ -20,6 +20,9 @@ export default function GeneratePage({
     useState<SetlistResponse | null>(null);
   return (
     <main className="p-8">
+      <div className={cn("flex", "justify-between")}>
+        <h1 className={cn("text-xl", "font-bold", "mb-4")}>Generate Setlist</h1>
+      </div>
       <div className={cn("py-4")}>
         <form
           onSubmit={async (e) => {
