@@ -48,7 +48,7 @@ export default function BandLayout({
       <nav>
         <div className="flex flex-wrap items-center justify-between p-8">
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            {band.name}
+            <Link href={`/${band.id}/settings`}>{band.name}</Link>
           </span>
           <MobileNavbar options={options} />
           <FullWidthNavbar options={options} />
