@@ -5,9 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { generate } from "./generate";
+import { generate, SetlistResponse } from "./generate";
 import { db } from "@/lib/db";
 import { Skeleton } from "@/components/ui/skeleton";
+import { z } from "zod";
 
 export default function GeneratePage({
   params,
@@ -16,7 +17,8 @@ export default function GeneratePage({
 }) {
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
-  const [setlist, setSetlist] = useState<{ title: string; key: string }[]>([]);
+  const [setlistResponse, setSetlistResponse] =
+    useState<SetlistResponse | null>(null);
   return (
     <main className="p-8">
       <div className={cn("py-4")}>
@@ -29,7 +31,7 @@ export default function GeneratePage({
               .equals(params.bandId)
               .toArray();
             const result = await generate({ prompt, repertoire });
-            setSetlist(result.setlist);
+            setSetlistResponse(result);
             setGenerating(false);
           }}
         >
@@ -67,11 +69,12 @@ export default function GeneratePage({
           </div>
         </div>
       )}
-      {setlist.length > 0 && !generating && (
+      {setlistResponse && !generating && (
         <div className={cn("py-4")}>
+          <p className={cn("py-4")}>{setlistResponse.assistantMessage}</p>
           <h2 className={cn("text-xl", "font-bold", "mb-4")}>Setlist</h2>
           <ul>
-            {setlist.map((song) => (
+            {setlistResponse.setlist.map((song) => (
               <li key={song.title}>
                 {song.title} ({song.key})
               </li>
