@@ -2,6 +2,7 @@
 
 import { DataTable } from "@/components/layout/DataTable";
 import { Band, db } from "@/lib/db";
+import { mixpanel } from "@/lib/mixpanel";
 import { ColumnDef } from "@tanstack/react-table";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useRouter } from "next/navigation";
@@ -21,6 +22,7 @@ export function BandsList() {
       columns={columns}
       data={bands}
       onRowClick={(band) => {
+        mixpanel.track("Band Clicked", { bandId: band.id });
         router.push(`/${band.id}`);
       }}
     />

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { generate, SetlistResponse } from "./generate";
 import { db } from "@/lib/db";
 import { Skeleton } from "@/components/ui/skeleton";
+import { mixpanel } from "@/lib/mixpanel";
 
 export default function GeneratePage({
   params,
@@ -26,6 +27,10 @@ export default function GeneratePage({
       <div className={cn("py-4")}>
         <form
           onSubmit={async (e) => {
+            mixpanel.track("Generate Setlist Clicked", {
+              bandId: params.bandId,
+              prompt,
+            });
             e.preventDefault();
             setGenerating(true);
             const repertoire = await db.songs

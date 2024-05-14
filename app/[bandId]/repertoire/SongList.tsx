@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
 import { EditSongSheet } from "./EditSongSheet";
+import { mixpanel } from "@/lib/mixpanel";
 
 const columns: ColumnDef<Song>[] = [
   {
@@ -33,7 +34,10 @@ export function SongList({ bandId }: { bandId: string }) {
       <DataTable
         columns={columns}
         data={songs}
-        onRowClick={(song) => setSelectedSong(song)}
+        onRowClick={(song) => {
+          setSelectedSong(song);
+          mixpanel.track("Edit Song Clicked", { bandId, songId: song.id });
+        }}
       />
     </>
   );

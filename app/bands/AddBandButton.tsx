@@ -10,6 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { createBand } from "@/lib/db";
+import { mixpanel } from "@/lib/mixpanel";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -35,8 +36,11 @@ export function AddBandButton() {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
-              await createBand({
+              const bandId = await createBand({
                 name,
+              });
+              mixpanel.track("Band Created", {
+                bandId,
               });
               setName("");
               setOpen(false);

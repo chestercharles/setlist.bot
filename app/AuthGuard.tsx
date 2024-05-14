@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon, RocketIcon } from "@radix-ui/react-icons";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRegisterMixpanel } from "@/lib/mixpanel";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -24,6 +25,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   const ui = useObservable(db.cloud.userInteraction);
   const user = useObservable(db.cloud.currentUser);
+
+  useRegisterMixpanel(user);
 
   if (user?.isLoggedIn) {
     return <>{children}</>;

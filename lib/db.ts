@@ -102,7 +102,7 @@ export async function addSong(params: {
 }) {
   const band = await db.bands.get(params.bandId);
   if (!band) throw new Error("Band not found");
-  await db.songs.add({
+  const songId = await db.songs.add({
     id: slugify(params.title),
     title: params.title,
     bandId: params.bandId,
@@ -110,6 +110,7 @@ export async function addSong(params: {
     key: params.key,
     description: params.description,
   });
+  return songId;
 }
 
 export async function editSong(

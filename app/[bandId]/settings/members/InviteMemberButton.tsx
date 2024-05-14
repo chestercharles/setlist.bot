@@ -10,6 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { db, inviteBandMember } from "@/lib/db";
+import { mixpanel } from "@/lib/mixpanel";
 import { cn } from "@/lib/utils";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
@@ -44,6 +45,11 @@ export function InviteMemberButton({ bandId }: { bandId: string }) {
               setName("");
               setEmail("");
               setOpen(false);
+              mixpanel.track("Band Member Invited", {
+                bandId,
+                inviteeEmail: email,
+                inviteeName: name,
+              });
             }}
           >
             <div className="grid gap-4">

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { addSong } from "@/lib/db";
+import { mixpanel } from "@/lib/mixpanel";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -32,7 +33,7 @@ export function AddSongButton({ bandId }: { bandId: string }) {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
-              await addSong({
+              const songId = await addSong({
                 title,
                 bandId,
                 key,
@@ -42,6 +43,10 @@ export function AddSongButton({ bandId }: { bandId: string }) {
               setKey("");
               setDescription("");
               setOpen(false);
+              mixpanel.track("Song Created", {
+                bandId,
+                songId,
+              });
             }}
           >
             <div className="grid gap-4">

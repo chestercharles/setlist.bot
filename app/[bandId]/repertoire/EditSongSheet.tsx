@@ -24,6 +24,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { mixpanel } from "@/lib/mixpanel";
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -70,6 +71,10 @@ export function EditSongSheet({
                 description,
               });
               close();
+              mixpanel.track("Song Edited", {
+                bandId: song.bandId,
+                songId: song.id,
+              });
             }}
           >
             <div className="grid gap-4">
