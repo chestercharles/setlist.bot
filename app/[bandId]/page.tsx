@@ -16,9 +16,46 @@ export default function GeneratePage({
   params: { bandId: string };
 }) {
   const [prompt, setPrompt] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [setlistResponse, setSetlistResponse] =
     useState<SetlistResponse | null>(null);
+
+  async function generateSetlist() {
+    mixpanel.track("Generate Setlist Clicked", {
+      bandId: params.bandId,
+      prompt,
+    });
+    setGenerating(true);
+    setError(null);
+    const repertoire = await db.songs
+      .where("bandId")
+      .equals(params.bandId)
+      .toArray();
+    const result = await generate({ prompt, repertoire })
+      .then((result) => {
+        if (result) {
+          mixpanel.track("Setlist Generated", {
+            bandId: params.bandId,
+            prompt,
+            result,
+          });
+        }
+        return result;
+      })
+      .catch((e) => {
+        mixpanel.track("Setlist Generation Failed", {
+          bandId: params.bandId,
+          prompt,
+          error: e.message,
+        });
+        setError(e.message);
+        return null;
+      });
+    setSetlistResponse(result);
+    setGenerating(false);
+  }
+
   return (
     <main className="p-8">
       <div className={cn("flex", "justify-between")}>
@@ -27,25 +64,8 @@ export default function GeneratePage({
       <div className={cn("py-4")}>
         <form
           onSubmit={async (e) => {
-            mixpanel.track("Generate Setlist Clicked", {
-              bandId: params.bandId,
-              prompt,
-            });
             e.preventDefault();
-            setGenerating(true);
-            const repertoire = await db.songs
-              .where("bandId")
-              .equals(params.bandId)
-              .toArray();
-            const result = await generate({ prompt, repertoire });
-            setSetlistResponse(result);
-            setGenerating(false);
-            if (result)
-              mixpanel.track("Setlist Generated", {
-                bandId: params.bandId,
-                prompt,
-                result,
-              });
+            await generateSetlist();
           }}
         >
           <div className="grid gap-4">
@@ -69,6 +89,15 @@ export default function GeneratePage({
           </div>
         </form>
       </div>
+      {error && (
+        <div className={cn("py-4")}>
+          <p className={cn("py-4")}>
+            Something went wrong when trying to generate your setlist.
+            We&apos;ll work on fixing this. In the meantime, give it another
+            try!{" "}
+          </p>
+        </div>
+      )}
       {generating && (
         <div className="flex items-center space-x-4">
           <div className="space-y-2">
