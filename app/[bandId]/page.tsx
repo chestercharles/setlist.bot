@@ -40,6 +40,12 @@ export default function GeneratePage({
             const result = await generate({ prompt, repertoire });
             setSetlistResponse(result);
             setGenerating(false);
+            if (result)
+              mixpanel.track("Setlist Generated", {
+                bandId: params.bandId,
+                prompt,
+                result,
+              });
           }}
         >
           <div className="grid gap-4">
