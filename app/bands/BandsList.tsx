@@ -17,7 +17,7 @@ export function BandsList() {
       {bands.map((band) => (
         <BandCard key={band.id} band={band} />
       ))}
-      <CreateNeBandCard />
+      <CreateNewBandCard />
     </div>
   );
 }
@@ -51,7 +51,7 @@ function BandCard({ band }: { band: Band }) {
   );
 }
 
-function CreateNeBandCard() {
+function CreateNewBandCard() {
   const [open, setOpen] = useState(false);
   return (
     <>
