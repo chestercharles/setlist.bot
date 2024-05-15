@@ -28,6 +28,7 @@ const bandCardClassNames = cn(
   "cursor-pointer",
   "m-0",
   "mr-4",
+  "mb-4",
   "transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none"
 );
 
