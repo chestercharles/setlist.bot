@@ -14,8 +14,13 @@ import { mixpanel } from "@/lib/mixpanel";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-export function AddBandButton() {
-  const [open, setOpen] = useState(false);
+export function AddBandButton({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) {
   const [name, setName] = useState("");
   return (
     <Sheet
@@ -25,9 +30,6 @@ export function AddBandButton() {
         setName("");
       }}
     >
-      <Button type="button" onClick={() => setOpen(true)}>
-        New
-      </Button>
       <SheetContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <SheetHeader>
           <SheetTitle>Create Band</SheetTitle>
