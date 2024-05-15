@@ -3,8 +3,13 @@
 import { cn } from "@/lib/utils";
 import { AddBandButton } from "./AddBandButton";
 import { BandsList } from "./BandsList";
+import { useEffect } from "react";
+import { mixpanel } from "@/lib/mixpanel";
 
 export default function BandsPage() {
+  useEffect(() => {
+    mixpanel.track("Bands Page Viewed");
+  }, []);
   return (
     <main className={cn("p-8")}>
       <div className={cn("flex", "justify-between")}>

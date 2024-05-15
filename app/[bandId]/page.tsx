@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { generate, SetlistResponse } from "./generate";
 import { db } from "@/lib/db";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,6 +22,12 @@ export default function GeneratePage({
   const [generating, setGenerating] = useState(false);
   const [setlistResponse, setSetlistResponse] =
     useState<SetlistResponse | null>(null);
+
+  useEffect(() => {
+    mixpanel.track("Band Generate Page Viewed", {
+      bandId: params.bandId,
+    });
+  }, [params.bandId]);
 
   async function generateSetlist() {
     mixpanel.track("Generate Setlist Clicked", {

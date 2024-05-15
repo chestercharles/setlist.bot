@@ -3,12 +3,19 @@
 import { cn } from "@/lib/utils";
 import { AddSongButton } from "./AddSongButton";
 import { SongList } from "./SongList";
+import { useEffect } from "react";
+import { mixpanel } from "@/lib/mixpanel";
 
 export default function RepertoirePage({
   params,
 }: {
   params: { bandId: string };
 }) {
+  useEffect(() => {
+    mixpanel.track("Band Repertoire Page Viewed", {
+      bandId: params.bandId,
+    });
+  }, [params.bandId]);
   return (
     <main className="p-8">
       <div className={cn("flex", "justify-between")}>
