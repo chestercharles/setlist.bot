@@ -10,6 +10,8 @@ import { db } from "@/lib/db";
 import { Skeleton } from "@/components/ui/skeleton";
 import { mixpanel } from "@/lib/mixpanel";
 
+export const maxDuration = 60;
+
 export default function GeneratePage({
   params,
 }: {

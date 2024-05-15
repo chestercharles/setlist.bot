@@ -1,10 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  functions: {
-    "src/app/**/*": {
-      maxDuration: 300,
-    },
-  },
-};
+const nextConfig = {};
 
 export default nextConfig;
