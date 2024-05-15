@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useObservable } from "dexie-react-hooks";
 import { db } from "../lib/db";
 import {
@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon, RocketIcon } from "@radix-ui/react-icons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRegisterMixpanel } from "@/lib/mixpanel";
+import { mixpanel, useRegisterMixpanel } from "@/lib/mixpanel";
+import { useRouter } from "next/navigation";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -27,6 +28,25 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const user = useObservable(db.cloud.currentUser);
 
   useRegisterMixpanel(user);
+
+  const router = useRouter();
+
+  const loginStep = useRef<"email" | "otp" | null>(null);
+  useEffect(() => {
+    if (ui?.type === "email") {
+      loginStep.current = "email";
+      mixpanel.track("User Prompted for Email");
+    }
+    if (ui?.type === "otp") {
+      loginStep.current = "otp";
+      mixpanel.track("User Prompted for OTP");
+    }
+    if (!ui && loginStep.current === "otp") {
+      loginStep.current = null;
+      mixpanel.track("User Completed Login");
+      router.replace("/");
+    }
+  }, [ui, router]);
 
   if (user?.isLoggedIn) {
     return <>{children}</>;
